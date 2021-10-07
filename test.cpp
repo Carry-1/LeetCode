@@ -1,80 +1,30 @@
 #include <iostream>
 using namespace std;
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-     ListNode(int x) : val(x), next(nullptr) {}
-     ListNode(int x, ListNode *next) : val(x), next(next) {}
- };
 class Solution {
 public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode *p = l1, *q = l2;
-        ListNode* Result = new ListNode;
-        ListNode* r = Result;
-        int count = 0;
-        for(; p && q; p = p->next, q = q->next){
-            if(p->val+q->val+count>9){
-                r->val = (p->val+q->val+count)%10;
-                count = 1;
-            }
-            else{
-                r->val = p->val+q->val+count;
-                count = 0;
-            }
-            r->next = new ListNode;
-            r = r->next; 
+    bool IsReverse(string s, int length){ //判断字符串是否是回文串
+        {
+            for(int i = 0; i<length/2; i++)
+                if(s[i]!=s[length-1-i])
+                    return false;
+            return true;
         }
-        if(p||q){
-            p = (p ? p : q);  
-            for(; p; p = p->next){
-                if(p->val+count>9){
-                    r->val = (p->val+count) % 10;
-                    count = 1;
-                }
-                else{
-                    r->val = (p->val+count);
-                    count = 0;
-                }
-                r->next = new ListNode;
-                r = r->next;
+    }
+    string longestPalindrome(string s) {
+        for(int i = s.size(); i>1; i--){ //判断字符串s的所有长度为i的子串中是否存在回文串
+            for(int j = 0; j+i<=s.size(); j++)
+            {
+                if(IsReverse(s.substr(j,i), i)) //如果是回文串，那么返回这个子串
+                    return s.substr(j,i);
             }
         }
-        if(count==1){
-            r->val = count;
-        }
-        else
-            delete r;
-        return Result;
+        return s.substr(0,1);
     }
 };
     
 int main(){
-        int array1[] = {2,4,3};
-        int array2[] = {5,6,4};
-        ListNode* L1 = new ListNode;
-        ListNode* r1 = L1;
-        ListNode* L2 = new ListNode;
-        ListNode* r2 = L2;
-
-        for(int i=0; i< 3; i++){
-            r1->val = array1[i];
-            r1->next = new ListNode;
-            r1 = r1->next;
-        }
-         
-        for(int i=0; i< 3; i++){
-            r2->val = array2[i];
-            r2->next = new ListNode;
-            r2 = r2->next;
-        }
-        delete r1;
-        delete r2;
-        Solution S1;
-        ListNode* Result = S1.addTwoNumbers(L1,L2);
-        for(ListNode* p1 = Result; p1; p1=p1->next){
-            cout<<p1->val<<" ";
-        }         
+        string s = "abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+        Solution sol;
+        cout<<sol.longestPalindrome(s);
     }
     
