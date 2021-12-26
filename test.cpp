@@ -22,75 +22,51 @@ typedef pair<int,int> pii;
 
 class Solution {
 public:
-    vector<int> searchRange(vector<int>& nums, int target) {
-        if(nums.size()==0)
-            return {-1,-1};
-        vector<int> result(2,-1);
-        int low = 0, high = nums.size()-1, mid = 0;
-        int found = 0;
-        while(low<=high)
+    void DFS(vector<vector<int>>& richer,vector<int>& quiet, int i, vector<bool>& visited, vector<int>& answer )
+    {
+        int n = quiet.size(); 
+        int m = richer.size();
+        for(int j=0; j<m; j++)
         {
-            mid = (low+high)/2;
-            if(nums[mid]==target)
+            if(richer[j][1]==i)
             {
-                found = 1;
-                break;
-            }
-            else if(nums[mid]>target)
-            {
-                high = mid -1;
-            }
-            else{
-                low = mid+1;
+                if(!visited[j])
+                {
+                    visited[j] = true;
+                    DFS(richer, quiet, j, visited, answer);
+                }
+                if(quiet[answer[i]]>quiet[answer[j]])
+                    answer[i] = answer[j];
             }
         }
-        if(!found)
-            return {-1,-1};
-        low = 0; 
-        high = nums.size()-1;
-        while(low<=high)
+    }
+    vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
+        int n = quiet.size();
+        queue<int> q;
+        vector<int> answer(n, 0);
+        vector<bool> visited(n,false);
+        for(int i=0; i<n; i++)
         {
-            mid = (low+high)/2;
-            if((mid==0&&nums[mid]==target)||(nums[mid-1]<target&&nums[mid]==target))
+            visited[i] = false;
+            answer[i] = i;
+        }
+        for(int i=0; i<n; i++)
+        {
+            if(!visited[i])
             {
-                result[0] = mid;
-                break;
-            }
-            else if(nums[mid]>=target)
-            {
-                high = mid -1;
-            }
-            else{
-                low = mid+1;
+                DFS(richer, quiet, i, visited, answer);
             }
         }
-        low = 0, high = nums.size()-1, mid = 0;
-        while(low<=high)
-        {
-            mid = (low+high)/2;
-            if((mid==nums.size()-1&&nums[mid]==target)||(nums[mid]==target&&nums[mid+1]>target))
-            {
-                result[1] = mid;
-                break;
-            }
-            else if(nums[mid]>target)
-            {
-                high = mid -1;
-            }
-            else{
-                low = mid+1;
-            }
-        }
-        return result;
 
+        return answer;
     }
 };
 
 int main()
 {
-vector<int> nums = {1,4};
-int target = 4;
-    Solution sol;
-    vector<int> result = sol.searchRange(nums, target);
+vector<vector<int>> richer = {{1,0},{2,1},{3,1},{3,7},{4,3},{5,3},{6,3}};
+vector<int> quiet = {3,2,5,4,6,1,7,0};
+ Solution sol;
+ auto result = sol.loudAndRich(richer,quiet);
     return 0;
 }
